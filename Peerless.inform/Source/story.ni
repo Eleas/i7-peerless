@@ -40,7 +40,7 @@ There is a fast-seed called the random-seed. [rnd_seed in Text Elite]
 
 Section - Planetary system
 
-The currently chosen planet index is a number that varies. The currently chosen planet index is 2 [, meaning the planet Qube].
+The currently chosen planet index is a number that varies. The currently chosen planet index is 1 [, meaning the planet Tibedied].
 
 Table of Planetary Systems
 name (text)	x (number)	y (number)	economy type (number)	government type (number)	tech level (number)	population (number)	productivity (number)	radius (number)	gssa (number)	gssb (number)	gssc (number)	gssd (number)
@@ -242,7 +242,16 @@ To say tourist draw: 	[A1] bleat "[one of][name-drop] [beverage][or][planet_name
 To say cuisine: 	[A2] bleat "[one of]meat[or]cutlet[or]steak[or]burgers[or]soup[by column]".
 To say prefix to sport: 	[A3] bleat "[one of]ice[or]mud[or]Zero-G[or]vacuum[or][planet_name ian] ultra[by column]".
 To say sport:	[A4] bleat "[one of]hockey[or]cricket[or]karate[or]polo[or]tennis[by column]".
-To say random-name: say "".
+
+To say random-name: 
+	let t be text;
+	let length be the pseudo-randomized number & 3;
+	repeat with i running from 0 to length:
+		let x be pseudo-randomized number & 62;
+		let t be "[t][character number x + 1 in pairs][character number x + 2 in pairs]";
+	let t be t in sentence case;
+	replace the text "." in t with "";
+	say t.
 
 
 Chapter - Witch-space
