@@ -17,6 +17,10 @@ You will need the [Inform 7 package, version 6M62](http://inform7.com/download/r
 
 Once Inform 7 is installed, either place the folder in the Inform/Projects/ folder, or copy the source code (stored in source/story.ni) into the editor. Next, go to the Settings tab and select the Glulx story file format, which is the larger type of Inform 7 projects (Inform 7's use of the z-Machine format is locked to using signed integers, which makes them too small for the purpose).  
 
+### Problems
+
+Cloning the repository gives you all you need to run this as an I7 project. However, on first run, I7 needs to recreate a bunch of documentation, which may cause the IDE to freeze for up to half a minute. Simply letting the IDE work until it's done is enough to resolve the issue.
+
 ### Dependencies
 
 None, at present. Peerless is written in I7 version 6M62 for Glulx, and the intent is to keep it up to date. No additional extensions are required. It does employ a bit of Inform 6, which may break the game under future versions of I7.
@@ -48,6 +52,10 @@ I believe this could be made workable, but I haven't gotten the details sorted i
 ## Abandoned ideas
 
 This covers a few ideas that were intriguing, but ultimately rejected as being beyond the scope of the project.
+
+### Space combat
+
+I'm uncertain if this could actually be done. The IF format is famously poor at presenting timed challenges or detailed spatial relationships. It's possible this will recur in some form, but not as a main part of the game.
 
 ### z-Machine compatibility
 
