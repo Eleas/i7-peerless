@@ -13,8 +13,7 @@ To decide whether bit (s - a number) in (n - a number) is set:
 	decide on whether or not n is odd. [Since first bit set always means odd value, this lets us test if bit s is set.]
 
 To decide which number is (n1 - number) ^ (n2 - number): [byte only!]
-	let sum be 0; let i be 1; repeat with n running from 1 to 8 begin; if ((whether or not bit n in n1 is set) is not (whether or not bit n in n2 is set)), let sum be sum + i; 	let i be i * 2; end repeat;
-	decide on sum.
+	let sum be 0; let i be 1; repeat with n running from 1 to 8 begin; if ((whether or not bit n in n1 is set) is not (whether or not bit n in n2 is set)), let sum be sum + i; let i be i * 2; end repeat; decide on sum.
 
 To decide which number is the/a/-- byte-value of/-- (n - a number) left-shifted (s - a number) bit/bits: repeat with i running from 1 to s begin; let n be n multiplied by 2; end repeat; decide on n & 255. [keep first eight bits, clear the rest]
 	
@@ -40,7 +39,13 @@ There is a fast-seed called the random-seed. [rnd_seed in Text Elite]
 
 Section - Planetary system
 
-The currently chosen planet index is a number that varies. The currently chosen planet index is 1 [, meaning the planet Tibedied].
+The currently chosen planet index is a number that varies. The currently chosen planet index is 8 [, meaning the planet Lave].
+A person has numbers called the x-coordinate and the y-coordinate.
+
+Last when play begins (this is the initialize coordinates by chosen planet rule): 
+	choose row currently chosen planet index in the Table of Planetary Systems;
+	now the x-coordinate of the player is the x entry;
+	now the y-coordinate of the player is the y entry.
 
 Table of Planetary Systems
 name (text)	x (number)	y (number)	economy type (number)	government type (number)	tech level (number)	population (number)	productivity (number)	radius (number)	gssa (number)	gssb (number)	gssc (number)	gssd (number)
@@ -192,9 +197,7 @@ To bleat (t - text):
 
 Section - Soup ingredients
 
-When play begins: say entrypoint.
-
-To decide which text is entrypoint: 
+To decide which text is initial goat-soup string: 
 	choose row (currently chosen planet index) in the Table of Planetary Systems;
 	now gsa is the gssa entry;
 	now gsb is the gssb entry;
@@ -257,38 +260,57 @@ To say random-name:
 Chapter - Witch-space
 
 A witch-space destination is a kind of thing. A witch-space destination has numbers called x and y. A witch-space destination has a real number called distance. A witch-space destination can be defined or undefined. A witch-space destination is usually undefined.
+
+A witch-space destination has a number called the planetary identifier. [This will have to change. We will use x/y coordinates, not indices.]
+
 There are 20 witch-space destinations. 
+Elsewhere is a room. All witch-space destinations are in elsewhere.
 
 Understand the printed name property as describing a witch-space destination.
 
 [Poor form. The correct way to do this would be a phrase that finds a planet by name, and sets us as present there.]
-When play begins (this is the provisional starting rule):
-	materialize all planets in a 70 unit distance from coordinates 20 and 173.
+Last when play begins (this is the provisional starting rule):
+	update the stellar neighborhood for the Cobra Mk III.
+	
+To update the/-- stellar neighborhood for (actor - a person):
+	materialize all planets in a 70 unit distance from coordinates (x-coordinate of the actor) and (y-coordinate of the actor).
 
 [I've been meaning to determine why Bell and Braben squashed the y axis by the fudge factor 4. I can't say why, but it apparently yields the same results as we see in the game.]
 To decide which real number is the distance from (x1 - a number) and (y1 - a number) to (x2 - a number) and (y2 - a number) (this is Ian Bell's peculiar variation on the Pythagoran Theorem phrase):
 	decide on 4 multiplied by the square root of (((x1 - x2) * (x1 - x2)) plus ((y1 - y2) * (y1 - y2) divided by 4));
 
-To materialize the/all/-- planets in a/-- (r - a number) unit/units distance from coordinates (x - a number) and (y - a number) (this is the instantiate stellar neighborhood phrase):
-	now every witch-space destination is undefined;
+To decide which list of numbers is planet-entries in a/-- (r - a number) unit/units distance from coordinates (x - a number) and (y - a number):
+	let L be a list of numbers;
 	let coordinate radius be r / 4;
 	let x1 be x minus (r / 4);
 	let x2 be x plus (r / 4);
 	let y1 be y minus (r / 2);
 	let y2 be y plus (r / 2);
+	let row-counter be 1;
 	repeat through the Table of Planetary Systems:
 		if the x entry is at least x1 and the x entry is at most x2:
 			if the y entry is at least y1 and the y entry is at most y2:
-				let d be the distance from x and y to x entry and y entry;
-				if there is an undefined witch-space destination (called the intended destination):
-					now the printed name of the intended destination is "[name entry]";
-					now the x of the intended destination is the x entry;
-					now the y of the intended destination is the y entry;
-					now the distance of the intended destination is d;
-					now the intended destination is defined.
-	
+				add the row-counter to L;
+		increment the row-counter;
+	decide on L.
+
+To materialize the/all/-- planets in a/-- (r - a number) unit/units distance from coordinates (x - a number) and (y - a number) (this is the instantiate stellar neighborhood phrase):
+	now every witch-space destination is undefined;
+	let L be the planet-entries in a r unit distance from coordinates x and y;
+	repeat with index running through L:
+		choose row index in the Table of Planetary Systems;
+		if there is an undefined witch-space destination (called the intended destination):
+			now the printed name of the intended destination is "[name entry]";
+			now the x of the intended destination is the x entry;
+			now the y of the intended destination is the y entry;
+			let d be the distance from x and y to x entry and y entry;
+			now the distance of the intended destination is d;
+			now the planetary identifier of the intended destination is the index;
+			now the intended destination is defined.
 					
 Witch-space traveling to is an action applying to one visible thing. Understand "travel to [any thing]" as witch-space traveling to. Understand "jump to [any thing]" as witch-space traveling to.
+Report witch-space traveling to:
+	say "Space tears as you make the jump to witch-space. Moments later, you emerge into the [planet_name] system."
 
 Rule for printing a parser error when the latest parser error is the noun did not make sense in that context error (this is the provisional error message for selecting unknown destination rule): 
 	say "That destination is unavailable." instead. 
@@ -297,17 +319,43 @@ Check witch-space traveling to something that is not a witch-space destination (
 Check witch-space traveling to a witch-space destination that is undefined (this is the undefined destination rule): say "That destination isn't in the navigational computer." instead.
 Check witch-space traveling to a witch-space destination when the distance of the noun is 0 (this is the must travel somewhere rule): say "You are already here." instead.
 
-Instead of jumping (this is the ersatz stellar neighborhood scanner rule): 
-	map the stars.
+[This will have to change. The traveling must be done to x-y coordinates, and from thence find the planet in question.]
+Carry out witch-space traveling to:
+	now the currently chosen planet index is the planetary identifier of the noun;
+	choose row currently chosen planet index in the Table of Planetary Systems;
+	now the x-coordinate of the actor is the x entry;
+	now the y-coordinate of the actor is the y entry;
+	materialize all planets in a 70 unit distance from coordinates (x-coordinate of the actor) and (y-coordinate of the actor).
 
 To map the stars (this is the provisional star-mapping rule):
-	repeat with item running through defined witch-space destinations:
+	let L be the list of defined witch-space destinations;
+	sort L in distance order;
+	repeat with item running through L:
+		if the distance of the item is 0, say bold type;
 		if the distance of the item is greater than 70, say italic type;
-		say "[printed name of the item] ([x of the item]x[y of the item]) -- [distance of the item][line break]";
-	say roman type.
-
-Elsewhere is a room. All witch-space destinations are in elsewhere.
-Space is a room. The player is in space.
+		say "[printed name of the item] ([x of the item]x[y of the item]) -- [if the distance of the item is 0]current system[otherwise][distance of the item / 10] light years[end if][line break]";
+		say roman type.
+		
+To decide which number is closest planet to coordinates (x - a number) and (y - a number) by index:
+	let L be a list of numbers;
+	let r be 10;
+	while the number of entries in L is 0:
+		let L be planet-entries in a r unit distance from coordinates x and y;
+	let candidate be entry 1 in L;
+	choose row 1 in the Table of Planetary Systems;
+	let candidate-distance be the distance from x and y to x entry and y entry;
+	repeat with index running through L:
+		choose row index in the Table of Planetary Systems;
+		let new-candidate-distance be the distance from x and y to x entry and y entry;
+		if new-candidate-distance is less than candidate-distance:
+			now candidate is the index;
+	decide on the candidate.
+	
+[Possibly not needed, but it's nice to have.]
+To say closest planet to coordinates (x - a number) and (y - a number):
+	choose row (closest planet to coordinates x and y by index) in the Table of Planetary Systems;
+	say the name entry.
+		
 
 Volume - Automatic tests (not for release)
 
@@ -607,3 +655,28 @@ Last when play begins (this is the galaxy generator test rule):
 		if errors is not empty:
 			say "[bold type][name entry] (SYSTEM [i - 1]) ERROR[if the number of entries in errors is not 1]S[end if]![roman type] [errors].";
 		now errors is { }.
+
+
+Volume - The Game
+
+Chapter - Star Travel
+
+The Cobra Mk III is a neuter person. The player is the Cobra Mk III. Understand "Cobra" or "Mk" or "III" as the Cobra Mk III. The description is "The Cobra MK III is described as the pinnacle of medium-range, medium capacity fighter-traders. In shape, it resembles a flat-topped pentagonal pyramid cut squarely in half. Yours is painted gunmetal gray, with blue trimmings."
+
+The print empty inventory rule response (A) is "Your cargo hold is empty."
+
+Short-range scanning is an action applying to one thing. Understand "scan [something]" as short-range scanning. Understand the command "map" as "scan".
+
+Rule for supplying a missing noun while short-range scanning (this is the if in doubt scan the stars rule):
+	now the noun is the stars.
+
+Carry out short-range scanning (this is the display map of stellar neighborhood rule): 
+	say "You glance at the local systems screen.[paragraph break]";
+	map the stars.
+	
+Chapter - The Game
+
+Space is a room. "Deep space surrounds you."
+Some stars are backdrop. The stars are scenery in space. The description of the stars is "Pinpricks in the infinite dark." Understand "nearby/local" or "systems" as the stars.
+
+The player is in space. 
