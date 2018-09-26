@@ -19,7 +19,7 @@ Once Inform 7 is installed, either place the folder in the Inform/Projects/ fold
 
 ### Dependencies
 
-None, at present. Peerless is written in I7 6M62 under Glulx without extensions, and the intent is to keep it up to date. No additional extensions are required. It does use a bit of Inform 6, which may break the game under future versions of I7.
+None, at present. Peerless is written in I7 version 6M62 for Glulx, and the intent is to keep it up to date. No additional extensions are required. It does employ a bit of Inform 6, which may break the game under future versions of I7.
 
 ### Tests
 
@@ -29,25 +29,32 @@ At the momnent, the automatic tests do not validate the Goat Seed string.
 
 ## Ideas for further work
 
-### z-Machine compatibility
+### Old-School vs Enhanced mode
 
-The game could be made compatible with z8, but it's hard to see a point to it. Recent versions of I7 impose a size overhead that renders the z-Machine almost obsolete. Still, if someone wants to make the bit-shifting and so on more generic and thus useful, that would be appreciated. I can't see a trivial way of using unsigned values without dropping down to z-machine assembly, however, which I'm not sure is practical.
-
-### Instantiating the "Goat Soup" object ingame
-
-This seems to be already present in some form in the original game, which would display a picture on-screen of a planet's inhabitants. It could be taken much further, however, and I7 should allow us do that in a compact, systematic fashion.
+As it is, the Elite universe is really rather samey. I'm therefore considering the addition of more pseudorandom variation in the various solar systems, such as more planets, moons, planet visual descriptions, et cetera. As this represents a departure from the actual Elite universe, this will either have to be a togglable mode, or possibly an entirely new game built on the same basic principles.    
 
 ### Space traversal
 
-This is definitely planned. The particulars are not as well worked out, however.
+This is definitely planned. Eventually, the player will be piloting the Cobra. For now, the important thing is to have the player guide the Cobra directly.
+
+### Trading
+
+Docking to the Coriolis station should be trivial. Trading engine is straightforward.
 
 ### Planetary landings
 
 I believe this could be made workable, but I haven't gotten the details sorted in my head yet.
+
+## Abandoned ideas
+
+This covers a few ideas that were intriguing, but ultimately rejected as being beyond the scope of the project.
+
+### z-Machine compatibility
+
+The game could be made compatible with z8, but it's hard to see a point to it. Recent versions of I7 impose a size overhead that renders the z-Machine almost obsolete. Still, if someone wants to make the bit-shifting and so on more generic and thus useful, that would be appreciated. I can't see a trivial way of using unsigned values without dropping down to z-machine assembly, however, which I'm not sure is practical. Therefore, compatibility with the z-Machine is not planned. 
 
 ## Credits
 
 Ian Bell and David Braben wrote the original Elite on the BBC Micro. They are its captains still.
 
 In addition, I am indebted to Richard Carlsson, whose [GCC-compliant version of Text Elite](https://github.com/richcarl/txtelite) provided not just a compiling version of TE, but also the kick in the pants I needed to do something with my idea. 
-# i7-peerless
