@@ -205,6 +205,13 @@ To decide which text is initial goat-soup string:
 	now gsd is the gssd entry;
 	decide on "[Planet] is [general planetary descriptor]."
 
+[Rough placeholder, refinement would not go amiss.]
+To decide which number is the planet-index for (t - a text):
+	repeat with r running from 1 to the number of rows in the Table of Planetary Systems:
+		choose row r in the Table of Planetary Systems;
+		if the name entry is t, decide on r;
+	decide on -1.
+
 To decide which text is planet_name: 
 	choose row (currently chosen planet index) in the Table of Planetary Systems;
 	decide on the name entry.
@@ -256,6 +263,28 @@ To say random-name:
 	replace the text "." in t with "";
 	say t.
 
+To decide which text is species of (t - a text):
+	decide on the species of planet-index for t.
+
+To decide which text is species of (n - a number) (this is the calculate species name phrase):
+	choose row n in the Table of Planetary Systems;
+	let stature be { "Large", "Fierce", "Small" };
+	let coloration be { "Green", "Red", "Yellow", "Blue", "Black", "Harmless" };
+	let characteristics be { "Slimy", "Bug - Eyed", "Horned", "Bony", "Fat", "Furry" };
+	let base type be { "Rodents", "Frogs", "Lizards", "Lobsters", "Birds", "Humanoids", "Felines", "Insects" };
+	if the byte-value of the gssc entry right-shifted 7 bits is even:
+		decide on "Human Colonials";
+	otherwise:
+		let t be text;
+		if ((the byte-value of the gssd entry right-shifted 2 bits ) & 3) is less than three:
+			let t be "[entry (((the byte-value of the gssd entry right-shifted 2 bits) & 3) + 1) of stature] ";
+		if ((the byte-value of the gssd entry right-shifted 5 bits ) & 7) is less than six:
+			let t be "[t][entry (((the byte-value of the gssd entry right-shifted 5 bits) & 7) + 1) of coloration] ";
+		if ((the x entry ^ the y entry) & 7) is less than six:
+			let t be "[t][entry (((the x entry ^ the y entry) & 7) + 1) of characteristics] ";
+		decide on "[t][entry (((the x entry ^ the y entry) & 7) + (gssd entry & 3) + 1) of base type]".
+
+
 
 Chapter - Witch-space
 
@@ -270,7 +299,8 @@ Understand the printed name property as describing a witch-space destination.
 
 [Poor form. The correct way to do this would be a phrase that finds a planet by name, and sets us as present there.]
 Last when play begins (this is the provisional starting rule):
-	update the stellar neighborhood for the Cobra Mk III.
+	update the stellar neighborhood for the Cobra Mk III;
+	say species of "Reorte".
 	
 To update the/-- stellar neighborhood for (actor - a person):
 	materialize all planets in a 70 unit distance from coordinates (x-coordinate of the actor) and (y-coordinate of the actor).
@@ -318,6 +348,7 @@ Rule for printing a parser error when the latest parser error is the noun did no
 Check witch-space traveling to something that is not a witch-space destination (this is the illegal hyperspace destination rule): say "[The noun] [are] not a legal destination."
 Check witch-space traveling to a witch-space destination that is undefined (this is the undefined destination rule): say "That destination isn't in the navigational computer." instead.
 Check witch-space traveling to a witch-space destination when the distance of the noun is 0 (this is the must travel somewhere rule): say "You are already here." instead.
+Check witch-space traveling to a witch-space destination when the distance of the noun is greater than 70: say "Out of gas!" instead.
 
 [This will have to change. The traveling must be done to x-y coordinates, and from thence find the planet in question.]
 Carry out witch-space traveling to:
@@ -351,11 +382,10 @@ To decide which number is closest planet to coordinates (x - a number) and (y - 
 			now candidate is the index;
 	decide on the candidate.
 	
-[Possibly not needed, but it's nice to have.]
 To say closest planet to coordinates (x - a number) and (y - a number):
 	choose row (closest planet to coordinates x and y by index) in the Table of Planetary Systems;
 	say the name entry.
-		
+
 
 Volume - Automatic tests (not for release)
 
@@ -662,6 +692,54 @@ Volume - The Game
 Chapter - Star Travel
 
 The Cobra Mk III is a neuter person. The player is the Cobra Mk III. Understand "Cobra" or "Mk" or "III" as the Cobra Mk III. The description is "The Cobra MK III is described as the pinnacle of medium-range, medium capacity fighter-traders. In shape, it resembles a flat-topped pentagonal pyramid cut squarely in half. Yours is painted gunmetal gray, with blue trimmings."
+
+The galactic gazetteer is part of the Cobra Mk III.
+Rule for supplying a missing noun while consulting:
+	now the noun is the galactic gazetteer.
+Check consulting the galactic gazetteer about a topic:
+	repeat through the Table of Planetary Systems:
+		if the name entry in lower case is the topic understood, continue the action;
+	say "You find nothing under the heading '[the topic understood]' in the galactic gazetteer." instead.
+
+Carry out consulting the galactic gazetteer about a topic:
+	let previous planet be the currently chosen planet index;
+	let r be 1;
+	repeat through the Table of Planetary Systems:
+		if the name entry in lower case is the topic understood:
+			say "[name entry] (x[x entry] : y[y entry])[line break]";	
+			say "Economy: [economy type entry][line break]";
+			say "Government: [government type entry][line break]";
+			say "Tech level: [tech level entry][line break]";
+			say "Population: [population entry][line break]";
+			say "Species: [species of r][line break]";
+			say "Productivity: [productivity entry][line break]";
+			say "Radius: [radius entry][paragraph break]";
+			now the currently chosen planet index is r;
+			say initial goat-soup string;
+			say line break;
+		increment r;
+	now the currently chosen planet index is the previous planet;
+	stop the action.
+
+The block consulting rule does nothing when the noun is the galactic gazetteer.
+
+[economy type (number)	government type (number)	tech level (number)	population (number)	productivity (number)	radius ]
+
+The last command is a text that varies. 
+The parser error flag is a truth state that varies. The parser error flag is false. 
+
+Rule for printing a parser error when the latest parser error is the only understood as far as error and the player's command matches the regular expression "look up.+": 
+	now the last command is the player's command; 
+	now the parser error flag is true; 
+	let n be "[the player's command] in the galactic gazetteer"; 
+	say "(in the galactic gazetteer)[line break]"; 
+	now the last command is n. 
+
+Rule for reading a command when the parser error flag is true: 
+	now the parser error flag is false; 
+	change the text of the player's command to the last command. 
+
+
 
 The print empty inventory rule response (A) is "Your cargo hold is empty."
 
