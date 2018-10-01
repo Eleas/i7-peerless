@@ -39,7 +39,7 @@ As it is, the Elite universe is really rather samey. I'm therefore considering t
 
 ### Space traversal
 
-This is definitely planned. Eventually, the player will be piloting the Cobra. For now, the important thing is to have the player guide the Cobra directly.
+Eventually, the player will be piloting the Cobra. Right now, the Cobra is the actual player-object.
 
 ### Trading
 
