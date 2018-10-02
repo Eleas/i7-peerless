@@ -31,7 +31,13 @@ When the game loads for testing purposes, it runs a regression test on the first
 
 At the momnent, the automatic tests do not validate the Goat Seed string. 
 
+## Current status of project
+
+At present, we can travel from star system to star system using the JUMP TO \[name of star system\] mechanic. We can also LOOK UP any star system in our galactic gazetteer for its information. The galactic hyperdrive is still unimplemented, as is the trading and in-system travel bits.  
+
 ## Ideas for further work
+
+These are notions that may find use at a later stage. Some of them are off-the-wall, some almost a shoo-in.
 
 ### Old-School vs Enhanced mode
 
@@ -55,7 +61,7 @@ This covers a few ideas that were intriguing, but ultimately rejected as being b
 
 ### Space combat
 
-I'm uncertain if this could actually be done. The IF format is famously poor at presenting timed challenges or detailed spatial relationships. It's possible this will recur in some form, but not as a main part of the game.
+I'm uncertain if this could actually be done. The IF format is famously poor at presenting timed challenges or detailed spatial relationships. It's possible this will recur in some form, but not as a main part of the game. 
 
 ### z-Machine compatibility
 
