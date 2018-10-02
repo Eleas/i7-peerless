@@ -29,7 +29,7 @@ None, at present. Peerless is written in I7 version 6M62 for Glulx, and the inte
 
 When the game loads for testing purposes, it runs a regression test on the first galaxy. Test uses the output from the C version of Text Elite as its dataset, which should be sufficiently accurate. There's currently no tests exist for the other galaxies, but that will likely change.
 
-At the momnent, the automatic tests do not validate the Goat Seed string. 
+At the momnent, the automatic tests do not validate the Goat Soup string. It is unlikely that tests will be made for the Species Name string, as that information was missing from Text Elite.
 
 ## Current status of project
 
