@@ -1,0 +1,329 @@
+Screen Open 0,640,256,8,Hires
+Pen 2 : Paper 0
+Curs Off : Flash Off : Cls 0
+
+Dim PLANETNAME$(8) : Rem used to output name
+Dim GOVERNMENTS$(8)
+Dim ECONOMIES$(8)
+Dim GSS$(36,5) : Rem the goat soup strings
+
+STACKSIZE=16
+Dim STACK(STACKSIZE)
+
+Gosub SETUP_STACK
+Gosub SETUP_NAME_CONVERTERS
+Gosub SETUP_GOAT_SOUP_STRINGS
+
+Read CHARSTRING$
+
+Gosub INIT_GALAXY
+
+For P=0 To 5
+   Gosub CONSTRUCT_PLANET
+
+   '   Gosub PRT_PLANET_NAME
+   '   Print "";
+   '   Locate 10, 
+   '   Print XPOS,YPOS; 
+   '   Locate 22, 
+   '   Print GOVERNMENTS$(GOVERNMENT);
+   '   Locate 40, 
+   '   Print ECONOMIES$(ECONOMY)
+
+   A$="#14 is #22."
+   _ADDRESS=Varptr(A$)
+   _LENGTH=Len(A$)
+   _CURR_POS=0
+   
+   Gosub DESCRIBE_PLANET
+   Print 
+   
+   End 
+Next P
+
+End 
+
+
+' Subroutines
+
+
+
+SETUP_STACK:
+STACKPTR=-1
+STACKIO=0
+Return 
+
+
+SETUP_NAME_CONVERTERS:
+GOVERNMENTS$(0)="Anarchy"
+GOVERNMENTS$(1)="Feudal"
+GOVERNMENTS$(2)="Multi-gov"
+GOVERNMENTS$(3)="Dictatorship"
+GOVERNMENTS$(4)="Communist"
+GOVERNMENTS$(5)="Confederacy"
+GOVERNMENTS$(6)="Democracy"
+GOVERNMENTS$(7)="Corporate State"
+ECONOMIES$(0)="Rich Ind"
+ECONOMIES$(1)="Average Ind"
+ECONOMIES$(2)="Por Ind"
+ECONOMIES$(3)="Mainly Ind"
+ECONOMIES$(4)="Mainly Agri"
+ECONOMIES$(5)="Rich Agri"
+ECONOMIES$(6)="Average Agri"
+ECONOMIES$(7)="Poor Agri"
+Return 
+
+
+SETUP_GOAT_SOUP_STRINGS:
+GSS$(0,0)="fabled" : GSS$(0,1)="notable" : GSS$(0,2)="well known" : GSS$(0,3)="famous" : GSS$(0,4)="noted"
+GSS$(1,0)="very" : GSS$(1,1)="mildly" : GSS$(1,2)="most" : GSS$(1,3)="reasonably" : GSS$(1,4)=""
+GSS$(2,0)="ancient" : GSS$(2,1)="#20" : GSS$(2,2)="great" : GSS$(2,3)="vast" : GSS$(2,4)="pink"
+GSS$(3,0)="#29 #28 plantations" : GSS$(3,1)="mountains" : GSS$(3,2)="#27" : GSS$(3,3)="#19 forests" : GSS$(3,4)="oceans"
+GSS$(4,0)="shyness" : GSS$(4,1)="silliness" : GSS$(4,2)="mating traditions" : GSS$(4,3)="loathing of #05" : GSS$(4,4)="love for #05"
+GSS$(5,0)="food blenders" : GSS$(5,1)="tourists" : GSS$(5,2)="poetry" : GSS$(5,3)="discos" : GSS$(5,4)="#13"
+GSS$(6,0)="talking tree" : GSS$(6,1)="crab" : GSS$(6,2)="bat" : GSS$(6,3)="lobst" : GSS$(6,4)="#B2"
+GSS$(7,0)="beset" : GSS$(7,1)="plagued" : GSS$(7,2)="ravaged" : GSS$(7,3)="cursed" : GSS$(7,4)="scourged"
+GSS$(8,0)="#21 civil war" : GSS$(8,1)="#26 #23 #24s" : GSS$(8,2)="a #24 disease" : GSS$(8,3)="#21 earthquakes" : GSS$(8,4)="#21 solar activity"
+GSS$(9,0)="its #02 #03" : GSS$(9,1)="the #B1 #23 #24" : GSS$(9,2)="its inhabitants' #25 #04" : GSS$(9,3)="#32" : GSS$(9,4)="its #12 #13"
+GSS$(10,0)="juice" : GSS$(10,1)="brandy" : GSS$(10,2)="water" : GSS$(10,3)="brew" : GSS$(10,4)="gargle blasters"
+GSS$(11,0)="#B2" : GSS$(11,1)="#B1 #24" : GSS$(11,2)="#B1 #B2" : GSS$(11,3)="#B1 #26" : GSS$(11,4)="#26 #B2"
+GSS$(12,0)="fabulous" : GSS$(12,1)="exotic" : GSS$(12,2)="hoopy" : GSS$(12,3)="unusual" : GSS$(12,4)="exciting"
+GSS$(13,0)="cuisine" : GSS$(13,1)="night life" : GSS$(13,2)="casinos" : GSS$(13,3)="sit coms" : GSS$(13,4)=" #32 "
+GSS$(14,0)="#B0" : GSS$(14,1)="The planet #B0" : GSS$(14,2)="The world #B0" : GSS$(14,3)="This planet" : GSS$(14,4)="This world"
+GSS$(15,0)="n unremarkable" : GSS$(15,1)=" boring" : GSS$(15,2)=" dull" : GSS$(15,3)=" tedious" : GSS$(15,4)=" revolting"
+GSS$(16,0)="planet" : GSS$(16,1)="world" : GSS$(16,2)="place" : GSS$(16,3)="little planet" : GSS$(16,4)="dump"
+GSS$(17,0)="wasp" : GSS$(17,1)="moth" : GSS$(17,2)="grub" : GSS$(17,3)="ant" : GSS$(17,4)="#B2"
+GSS$(18,0)="poet" : GSS$(18,1)="arts graduate" : GSS$(18,2)="yak" : GSS$(18,3)="snail" : GSS$(18,4)="slug"
+GSS$(19,0)="tropical" : GSS$(19,1)="dense" : GSS$(19,2)="rain" : GSS$(19,3)="impenetrable" : GSS$(19,4)="exuberant"
+GSS$(20,0)="funny" : GSS$(20,1)="wierd" : GSS$(20,2)="unusual" : GSS$(20,3)="strange" : GSS$(20,4)="peculiar"
+GSS$(21,0)="frequent" : GSS$(21,1)="occasional" : GSS$(21,2)="unpredictable" : GSS$(21,3)="dreadful" : GSS$(21,4)="deadly"
+GSS$(22,0)="#01 #00 for #09" : GSS$(22,1)="#01 #00 for #09 and #09" : GSS$(22,2)="#07 by #08" : GSS$(22,3)="#01 #00 for #09 but #07 by #08" : GSS$(22,4)="a#15 #16"
+GSS$(23,0)="#26" : GSS$(23,1)="mountain" : GSS$(23,2)="edible" : GSS$(23,3)="tree" : GSS$(23,4)="spotted"
+GSS$(24,0)="#30" : GSS$(24,1)="#31" : GSS$(24,2)="#06oid" : GSS$(24,3)="#18" : GSS$(24,4)="#17"
+GSS$(25,0)="ancient" : GSS$(25,1)="exceptional" : GSS$(25,2)="eccentric" : GSS$(25,3)="ingrained" : GSS$(25,4)="#20"
+GSS$(26,0)="killer" : GSS$(26,1)="deadly" : GSS$(26,2)="evil" : GSS$(26,3)="lethal" : GSS$(26,4)="vicious"
+GSS$(27,0)="parking meters" : GSS$(27,1)="dust clouds" : GSS$(27,2)="ice bergs" : GSS$(27,3)="rock formations" : GSS$(27,4)="volcanoes"
+GSS$(28,0)="plant" : GSS$(28,1)="tulip" : GSS$(28,2)="banana" : GSS$(28,3)="corn" : GSS$(28,4)="#B2weed"
+GSS$(29,0)="#B2" : GSS$(29,1)="#B1 #B2" : GSS$(29,2)="#B1 #26" : GSS$(29,3)="inhabitant" : GSS$(29,4)="#B1 #B2"
+GSS$(30,0)="shrew" : GSS$(30,1)="beast" : GSS$(30,2)="bison" : GSS$(30,3)="snake" : GSS$(30,4)="wolf"
+GSS$(31,0)="leopard" : GSS$(31,1)="cat" : GSS$(31,2)="monkey" : GSS$(31,3)="goat" : GSS$(31,4)="fish"
+GSS$(32,0)="#11 #10" : GSS$(32,1)="#B1 #30 #33" : GSS$(32,2)="its #12 #31 #33" : GSS$(32,3)="#34 #35" : GSS$(32,4)="#11 #10"
+GSS$(33,0)="meat" : GSS$(33,1)="cutlet" : GSS$(33,2)="steak" : GSS$(33,3)="burgers" : GSS$(33,4)="soup"
+GSS$(34,0)="ice" : GSS$(34,1)="mud" : GSS$(34,2)="Zero-G" : GSS$(34,3)="vacuum" : GSS$(34,4)="#B1 ultra"
+GSS$(35,0)="hockey" : GSS$(35,1)="cricket" : GSS$(35,2)="karate" : GSS$(35,3)="polo" : GSS$(35,4)="tennis"
+
+Return 
+
+
+
+INIT_GALAXY:
+SEED_0=23114
+SEED_1=584
+SEED_2=46931
+Return 
+
+
+TWEAK_SEED:
+TEMP=SEED_0+SEED_1+SEED_2
+TEMP=TEMP mod 65536
+SEED_0=SEED_1
+SEED_1=SEED_2
+SEED_2=TEMP
+Return 
+
+
+' Two first seeds, split up into four bytes
+GOAT_SOUP_SEEDS:
+GSSA=SEED_1 and 255
+GSSB=SEED_1
+Ror.w 8,GSSB
+GSSB=GSSB and 255
+GSSC=SEED_2 and 255
+GSSD=SEED_2
+Ror.w 8,GSSD
+GSSD=GSSD and 255
+Return 
+
+
+CONSTRUCT_PLANET:
+
+' Coordinates
+TEMP1=SEED_1
+Ror.w 8,TEMP1
+XPOS=TEMP1 and 255
+
+TEMP0=SEED_0
+Ror.w 8,TEMP0
+YPOS=TEMP0 and 255
+
+' Government type  
+TEMP1=SEED_1
+Ror.w 3,TEMP1
+GOVERNMENT=TEMP1 and 7
+
+' Economy
+TEMP0=SEED_0
+Ror.w 8,TEMP0
+ECONOMY=TEMP0 and 7
+If GOVERNMENT<2 Then ECONOMY=ECONOMY or 2
+
+' Tech level 
+TEMP1=SEED_1
+Ror.w 8,TEMP1
+TECH_LEVEL=(TEMP1 and 3)+(ECONOMY xor 7)
+Ror.b 1,TEMP
+TECH_LEVEL=TECH_LEVEL+(GOVERNMENT/2)
+If GOVERNMENT mod 2<>0 Then TECH_LEVEL=TECH_LEVEL+1
+
+' Pop
+_POPULATION=(4*TECH_LEVEL)+ECONOMY+GOVERNMENT+1
+
+' Prod 
+PRODUCTIVITY=((ECONOMY xor 7)+3)*(GOVERNMENT+4)*(_POPULATION*8)
+
+' Radius 
+
+TEMP2=SEED_2
+Ror.w 8,TEMP2
+
+RADIUS=256*((TEMP2 and 15)+11)+XPOS
+
+
+Gosub GOAT_SOUP_SEEDS
+
+
+' Name 
+LONGNAME=(SEED_0 and 64)<>0
+For N=0 To 7 Step 2
+   TEMP2=SEED_2
+   Ror.w 8,TEMP2
+   TEMP2=(TEMP2 and 31)*2
+   Gosub TWEAK_SEED
+   PLANETNAME$(N)=Mid$(CHARSTRING$,TEMP2+1,1)
+   PLANETNAME$(N+1)=Mid$(CHARSTRING$,TEMP2+2,1)
+Next N
+If LONGNAME=False
+   PLANETNAME$(6)=""
+   PLANETNAME$(7)=""
+End If 
+
+Return 
+
+
+GEN_RND_NUMBER:
+_X=(GSSA*2) and 255
+_A=_X+GSSC
+If GSSA>127 Then _A=_A+1
+GSSA=_A and 255
+GSSC=_X
+_A=_A/256
+_X=GSSB
+_A=(_A+_B+GSSD) and 255
+GSSB=_A
+GSSD=_X
+Return 
+
+
+PRT_PLANET_NAME:
+ISUPPERCASE=True
+For N=0 To 7
+   If PLANETNAME$(N)<>"."
+      If ISUPPERCASE=True
+         Print PLANETNAME$(N);
+         ISUPPERCASE=False
+      Else 
+         Print Lower$(PLANETNAME$(N));
+      End If 
+   End If 
+Next N
+Return 
+
+
+'put two things on stack:
+'length (3)
+'a string with three letters 
+
+DESCRIBE_PLANET:
+
+If STACKSIZE=-1
+   Print _CURR_POS
+   Print _LENGTH
+   Return 
+End If 
+
+While _CURR_POS<_LENGTH
+   _NEXTCHAR$=Chr$(Peek(_ADDRESS+_CURR_POS))
+   
+   If(_NEXTCHAR$="#")
+      _ZEROVAL=Asc("0")
+      _CODE1=Peek(_ADDRESS+_CURR_POS+1)
+      _CODE2=Peek(_ADDRESS+_CURR_POS+2)
+      
+      If _CODE1=Asc("B")
+         _CODE2=_CODE2-_ZEROVAL
+         If _CODE2=0
+            Gosub PRT_PLANET_NAME
+         Else If _CODE2=1
+            Gosub PRT_PLANET_NAME
+            Print "ian";
+         Else 
+            Print "RANDOMNAME";
+         End If 
+      Else 
+         Gosub GEN_RND_NUMBER
+         _CODE=((_CODE1-_ZEROVAL)*10)+_CODE2-_ZEROVAL
+         'push vars to stack
+         STACKIO=_CURR_POS
+         Gosub STACK_PUSH
+         STACKIO=_ADDRESS
+         Gosub STACK_PUSH
+         
+         S=0
+         For I=1 To 5
+            If _A>(I*51)
+               S=S+1
+            End If 
+         Next I
+         
+         'set new vars
+         _ADDRESS=Varptr(GSS$(_CODE,S))
+         _LENGTH=Peek(_ADDRESS-1)
+         _CURR_POS=0
+         
+
+         Gosub DESCRIBE_PLANET
+         
+         'restore variables 
+         Gosub STACK_POP
+         _LENGTH=Peek(STACKIO-1)
+         _ADDRESS=STACKIO : Rem This is a varptr 
+         Gosub STACK_POP
+         _CURR_POS=STACKIO
+      End If 
+      _CURR_POS=_CURR_POS+2
+   Else 
+      Print _NEXTCHAR$;
+   End If 
+   
+   _CURR_POS=_CURR_POS+1
+Wend 
+
+Return 
+
+
+
+STACK_POP:
+If STACKPTR=-1 Then Return 
+STACKIO=STACK(STACKPTR)
+STACKPTR=STACKPTR-1
+Return 
+
+STACK_PUSH:
+If STACKPTR=STACKSIZE-1 Then Return 
+STACKPTR=STACKPTR+1
+STACK(STACKPTR)=STACKIO
+Return 
+
+
+Data "..LEXEGEZACEBISOUSESARMAINDIREA.ERATENBERALAVETIEDORQUANTEISRION"
+
